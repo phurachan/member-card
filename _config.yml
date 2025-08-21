@@ -4,12 +4,8 @@ description: Complete fuel management system with mobile and web interfaces
 # Build settings
 markdown: kramdown
 highlighter: rouge
-theme: minima
 
 # Enable Mermaid support
-plugins:
-  - jekyll-mermaid
-
-# Mermaid configuration
-mermaid:
-  src: 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js'
+kramdown:
+  input: GFM
+  hard_wrap: false

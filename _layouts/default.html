@@ -94,17 +94,36 @@
     
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            themeVariables: {
-                primaryColor: '#667eea',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#5a67d8',
-                lineColor: '#667eea',
-                secondaryColor: '#764ba2',
-                tertiaryColor: '#f8f9fa'
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                themeVariables: {
+                    primaryColor: '#667eea',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#5a67d8',
+                    lineColor: '#667eea',
+                    secondaryColor: '#764ba2',
+                    tertiaryColor: '#f8f9fa'
+                }
+            });
+            
+            // Find all code blocks with language 'mermaid' and render them
+            const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid, code.language-mermaid');
+            mermaidBlocks.forEach((block, index) => {
+                const mermaidCode = block.textContent || block.innerText;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mermaid';
+                wrapper.id = 'mermaid-' + index;
+                
+                // Replace the code block with mermaid div
+                block.parentNode.parentNode.replaceChild(wrapper, block.parentNode);
+                
+                // Render the mermaid diagram
+                mermaid.render('mermaid-svg-' + index, mermaidCode).then(result => {
+                    wrapper.innerHTML = result.svg;
+                });
+            });
         });
     </script>
 </head>
