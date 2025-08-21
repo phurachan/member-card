@@ -1,9 +1,9 @@
 # Fuel Member System - Module/Screen/Use Case Flowchart
 
 This flowchart represents the structure found in mobile_app_ui.html with proper flow direction:
-- **Modules**: Top-level organization
+- **Modules**: Top-level organization of system components
 - **Screens**: Sequential flow downward (screen1 → screen2 → screen3)
-- **Use Cases**: Decision diamonds for user role branching (Member vs Employee)
+- **Use Cases**: Specific actions or conditions that users perform in each screen - what the user actually does, including decision points for different user roles (Member vs Employee)
 
 ## Complete System Flow
 
