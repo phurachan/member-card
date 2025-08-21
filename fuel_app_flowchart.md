@@ -10,6 +10,7 @@ This flowchart represents the structure found in mobile_app_ui.html with proper 
 ```mermaid
 graph TD
     START([Start: Fuel Member Card]) --> COMMON[Common Module]
+    START --> REG[Registration Module]
     START --> AUTH[Authentication Module]
     START --> QR[QR Code Module]
     START --> HIST[History/Transaction Module]
@@ -27,33 +28,46 @@ graph TD
     
 ```
 
-## 2. Authentication Module
+## 2. Registration Module
+
+```mermaid
+graph TD
+    REG[Registration Module] --> STEP1[Screen 1: Register]
+    
+    STEP1 -->UC1[Use Case 1:<br/>Register New Member Success<br/>REG_REGISTER_01]
+    STEP1 -->UC2[Use Case 2:<br/>Register Failed - Duplicate Data Alert<br/>REG_REGISTER_02]
+```
+
+## 3. Authentication Module
 
 ```mermaid
 graph TD
     AUTH[Authentication Module] --> STEP1[Screen 1: Login]
     
-    STEP1 -->UC1[Use Case 1:<br/>User Found and Registered?<br/>AUTH_LOGIN_01]
-    STEP1 -->UC2[Use Case 2:<br/>User Found but Not Registered?<br/>AUTH_LOGIN_02]
-    STEP1 -->UC3[Use Case 3:<br/>User Not Found - Show Error<br/>AUTH_LOGIN_03]
+    STEP1 -->UC1[Use Case 1:<br/>User Found and Registered<br/>AUTH_LOGIN_01]
+    STEP1 -->UC2[Use Case 2:<br/>User Found but Not Registered<br/>AUTH_LOGIN_02]
+    STEP1 -->UC3[Use Case 3:<br/>User Found with Multiple Roles - Select Role<br/>AUTH_LOGIN_03]
+    STEP1 -->UC4[Use Case 4:<br/>User Not Found - Show Error<br/>AUTH_LOGIN_04]
 
     UC1 -->STEP2[Screen 2: Verify OTP]
     UC2 -->STEP2
-    UC3 -->END
+    UC3 -->STEP2
+    UC4 -->STAY_SCREEN_1[Stay Screen 1: Login]
     
-    STEP2 -->UC4[Use Case 1:<br/>Submit Success<br/>AUTH_VERIFY_01]
-    STEP2 -->UC5[Use Case 2:<br/>OTP Expired Alert Message<br/>AUTH_VERIFY_02]
-    STEP2 -->UC6[Use Case 3:<br/>Send OTP Again Alert Message Confirm<br/>AUTH_VERIFY_04]
-    STEP2 -->UC7[Use Case 4:<br/>Submit Fail Alert Message<br/>AUTH_VERIFY_03]
+    STEP2 -->UC5[Use Case 1:<br/>Submit Success<br/>AUTH_VERIFY_01]
+    STEP2 -->UC6[Use Case 2:<br/>OTP Expired Alert Message<br/>AUTH_VERIFY_02]
+    STEP2 -->UC7[Use Case 3:<br/>Send OTP Again Alert Message Confirm<br/>AUTH_VERIFY_04]
+    STEP2 -->UC8[Use Case 4:<br/>Submit Fail Alert Message<br/>AUTH_VERIFY_03]
 
-    UC4 -->SUCCESS[Redirect to Home Page]
-    UC5 -->STAY[Stay in Verify OTP Page]
-    UC6 -->STAY[Stay in Verify OTP Page]
-    UC7 -->STAY[Stay on Verify OTP Page]
+    UC5 -->SUCCESS[Redirect to Home Page]
+    UC6 -->STAY_SCREEN_2[Stay Screen 2: Verify OTP]
+    UC7 -->STAY_SCREEN_2
+    UC8 -->STAY_SCREEN_2
+
     
 ```
 
-## 3. QR Code Module
+## 4. QR Code Module
 
 ```mermaid
 graph TD
@@ -63,8 +77,18 @@ graph TD
     STEP2 --> STEP3[Screen 3:<br/>*Employee:* Scaned and Fill Data]
     STEP3 -->FILL_STANDARD[Use Case 1:<br/>*Employee:* Fill Fuel Details and Send OTP<br/>QR_FILL_01]
     STEP3 -->CUSTOM_PRICE[Use Case 2:<br/>*Employee:* Custom Price/Unit Manual Input<br/>QR_FILL_02]
+    STEP3 -->USE_COUPON[Use Case 3:<br/>*Employee:* Use Coupon Quota Instead of Member Quota<br/>QR_FILL_05]
+    
+    USE_COUPON -->LICENSE_VERIFY{*Employee:* License Plate Verification}
+    LICENSE_VERIFY -->|License Matches| LICENSE_APPROVED[Use Case 6:<br/>*Employee:* License Matches - Proceed<br/>QR_FILL_06]
+    LICENSE_VERIFY -->|License Not Matches| LICENSE_BLOCKED[Use Case 7:<br/>*Employee:* License Not Matches - Blocked<br/>QR_FILL_07]
+    
     FILL_STANDARD -->CONNECTION_1[*Employee:* Fill All Data Required]
     CUSTOM_PRICE -->CONNECTION_1
+    LICENSE_APPROVED -->CONNECTION_1
+    LICENSE_BLOCKED -->RETRY_LICENSE[*Employee:* Retry License Capture]
+    RETRY_LICENSE -->LICENSE_VERIFY
+    
     CONNECTION_1 -->WAITING[*Employee:* Send OTP to Member <br/>and Waiting for Member Verification<br/>QR_FILL_03]
     CONNECTION_1 -->CONFIRM_BACK[*Employee:* Cancel Transaction<br/>QR_FILL_04]
     
@@ -90,7 +114,7 @@ graph TD
     EMP_SUCCESS --> END_QR
 ```
 
-## 4. History/Transaction Module
+## 5. History/Transaction Module
 
 ```mermaid
 graph TD
@@ -101,7 +125,7 @@ graph TD
     
 ```
 
-## 5. Profile Module
+## 6. Profile Module
 
 ```mermaid
 graph TD
@@ -113,12 +137,13 @@ graph TD
 
 ## Summary Statistics
 
-- **Total Modules**: 5 (Common, Authentication, QR Code, History/Transaction, Profile)
+- **Total Modules**: 6 (Common, Registration, Authentication, QR Code, History/Transaction, Profile)
 - **Total Screens**: 10
-- **Total Use Cases**: 25
-- **Member Use Cases**: 13
-- **Employee Use Cases**: 12
-- **Decision Points**: 25 (diamond shapes)
+- **Total Use Cases**: 29
+- **Member Use Cases**: 15
+- **Employee Use Cases**: 13
+- **Shared Use Cases**: 1
+- **Decision Points**: 26 (diamond shapes)
 - **Navigation Items**: 4 (Home, QR Code, History, Profile)
 
 ## Screen Reference Map
@@ -127,9 +152,12 @@ graph TD
 |--------|------|----------|-----------|-----------|
 | Common | 1 | 1 | COMMON_HOME_01 | Member |
 | Common | 1 | 2 | COMMON_HOME_02 | Employee |
+| Registration | 1 | 1 | REG_REGISTER_01 | Member |
+| Registration | 1 | 2 | REG_REGISTER_02 | Member |
 | Auth | 1 | 1 | AUTH_LOGIN_01 | Member |
 | Auth | 1 | 2 | AUTH_LOGIN_02 | Member |
-| Auth | 1 | 3 | AUTH_LOGIN_03 | Member |
+| Auth | 1 | 3 | AUTH_LOGIN_03 | Member/Employee |
+| Auth | 1 | 4 | AUTH_LOGIN_04 | Member |
 | Auth | 2 | 1 | AUTH_VERIFY_01 | Member |
 | Auth | 2 | 2 | AUTH_VERIFY_02 | Member |
 | Auth | 2 | 3 | AUTH_VERIFY_03 | Member |
@@ -140,6 +168,9 @@ graph TD
 | QR | 3 | 2 | QR_FILL_02 | Employee |
 | QR | 3 | 3 | QR_FILL_03 | Employee |
 | QR | 3 | 4 | QR_FILL_04 | Employee |
+| QR | 3 | 5 | QR_FILL_05 | Employee |
+| QR | 3 | 6 | QR_FILL_06 | Employee |
+| QR | 3 | 7 | QR_FILL_07 | Employee |
 | QR | 4 | 1 | QR_VERIFY_01 | Member |
 | QR | 4 | 2 | QR_VERIFY_02 | Member |
 | QR | 4 | 3 | QR_VERIFY_03 | Member |
