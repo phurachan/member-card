@@ -36,7 +36,21 @@ graph TD
     
     STEP1 -->UC1[Use Case 1:<br/>Register New Member Success<br/>REG_REGISTER_01]
     STEP1 -->UC2[Use Case 2:<br/>Register Failed - Duplicate Data Alert<br/>REG_REGISTER_02]
+
+    UC1 -->STEP2[Screen 2: Verify OTP]
+    UC2 -->STAY_SCREEN_1[Stay Screen 1: Register]
+
+    STEP2 -->UC5[Use Case 1:<br/>Submit Success<br/>AUTH_VERIFY_01]
+    STEP2 -->UC6[Use Case 2:<br/>OTP Expired Alert Message<br/>AUTH_VERIFY_02]
+    STEP2 -->UC7[Use Case 3:<br/>Send OTP Again Alert Message Confirm<br/>AUTH_VERIFY_04]
+    STEP2 -->UC8[Use Case 4:<br/>Submit Fail Alert Message<br/>AUTH_VERIFY_03]
+
+    UC5 -->SUCCESS[Redirect to Home Page]
+    UC6 -->STAY_SCREEN_2[Stay Screen 2: Verify OTP]
+    UC7 -->STAY_SCREEN_2
+    UC8 -->STAY_SCREEN_2
 ```
+
 
 ## 3. Authentication Module
 
@@ -63,9 +77,9 @@ graph TD
     UC6 -->STAY_SCREEN_2[Stay Screen 2: Verify OTP]
     UC7 -->STAY_SCREEN_2
     UC8 -->STAY_SCREEN_2
-
     
 ```
+
 
 ## 4. QR Code Module
 
