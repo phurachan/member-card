@@ -3,7 +3,7 @@ layout: default
 title: Mobile Flowchart
 ---
 
-# Fuel Member System - Module/Screen/Use Case Flowchart
+# Member Card System - Module/Screen/Use Case Flowchart
 
 This flowchart represents the structure found in mobile_app_ui.html with proper flow direction:
 - **Modules**: Top-level organization of system components
@@ -14,7 +14,7 @@ This flowchart represents the structure found in mobile_app_ui.html with proper 
 
 ```mermaid
 graph TD
-    START([Start: Fuel Member Card]) --> COMMON[Common Module]
+    START([Start: Member Card Card]) --> COMMON[Common Module]
     START --> REG[Registration Module]
     START --> AUTH[Authentication Module]
     START --> QR[QR Code Module]
