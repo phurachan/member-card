@@ -1,6 +1,10 @@
 title: MemberCard System Documentation
 description: Complete fuel management system with mobile and web interfaces
 
+# GitHub Pages settings
+baseurl: "/member-card"
+url: "https://phurachan.github.io"
+
 # Build settings
 markdown: kramdown
 highlighter: rouge
