@@ -1,3 +1,8 @@
+---
+layout: default
+title: Thai Flowchart (ผังงานภาษาไทย)
+---
+
 # ระบบบัตรสมาชิก
 
 ## การใช้งานบนอุปกรณ์เคลื่อนที่ (มือถือ,แท็บเล็ต)
@@ -156,7 +161,7 @@ graph TD
     START --> REPT[โมดูลรายงาน]
     START --> SETT[โมดูลตั้งค่า]
 
-    USER --> AUTH_1[การจัดการกลุ่มผู้ใช้งาน]
+    USER --> AUTH_1[การจัดการบทบาท]
     USER --> AUTH_2[การจัดการสิทธิ์การใช้งาน]
     USER --> AUTH_3[การจัดการผู้ใช้งาน]
 
@@ -210,4 +215,16 @@ flowchart TD
     D -->I[การจัดการอุปกรณ์<br/>STATION_MANAGEMENT_01/TAB_3]
     I --> I1[เพิ่มอุปกรณ์ใหม่<br/>STATION_MANAGEMENT_07/MODAL_1]
 
+```
+
+### การจัดการผู้ใช้งาน (User Management)
+```mermaid
+flowchart TD
+    START[การจัดการ<br/>บทบาท/สิทธิ์/ผู้ใช้งาน<br/>USER_MANAGEMENT_01] --> PERM_TAB[การจัดการสิทธิ์<br/>- การเข้าถึงหน้าจอ<br/>- กิจกรรมต่างๆในระบบ<br/>USER_MANAGEMENT_01/TAB_2]
+
+    PERM_TAB --> ROLES_TAB[การจัดการบทบาท<br/>คือ กลุ่มผู้ใช้งาน <br/>เพื่อแยกแยะสิทธิ์ตามกลุ่ม<br/>USER_MANAGEMENT_01/TAB_1]
+    ROLES_TAB --> ROLES_TAB_2[การมอบหมายสิทธิ์<br/>ให้แต่ละบทบาท<br/>สามารเข้าถึงหรือทำกิจกรรมใดได้บ้าง<br/>USER_MANAGEMENT_01/TAB_1]
+
+    ROLES_TAB_2 --> USER_ROLES_TAB[การจัดการผู้ใช้งาน<br/>USER_MANAGEMENT_01/TAB_3]
+    USER_ROLES_TAB --> USER_ROLES_TAB_2[การมอบหมายบทบาท<br/>ให้ผู้ใช้งานแต่ละคน<br/>USER_MANAGEMENT_01/TAB_3]
 ```

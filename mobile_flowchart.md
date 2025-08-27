@@ -1,3 +1,8 @@
+---
+layout: default
+title: Mobile Flowchart
+---
+
 # Fuel Member System - Module/Screen/Use Case Flowchart
 
 This flowchart represents the structure found in mobile_app_ui.html with proper flow direction:

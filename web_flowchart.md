@@ -1,3 +1,8 @@
+---
+layout: default
+title: Web Admin Flowchart
+---
+
 # Admin Register Member Flow Diagram
 
 ## English Version

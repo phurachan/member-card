@@ -109,32 +109,64 @@
             });
             
             // Find all code blocks with language 'mermaid' and render them
-            const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid, code.language-mermaid');
+            // This handles both Jekyll-processed and raw markdown
+            const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid, code.language-mermaid, .mermaid');
             mermaidBlocks.forEach((block, index) => {
-                const mermaidCode = block.textContent || block.innerText;
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mermaid';
-                wrapper.id = 'mermaid-' + index;
+                let mermaidCode;
+                let wrapper;
                 
-                // Replace the code block with mermaid div
-                block.parentNode.parentNode.replaceChild(wrapper, block.parentNode);
+                if (block.classList.contains('mermaid')) {
+                    // Already a mermaid div, just render it
+                    wrapper = block;
+                    mermaidCode = block.textContent || block.innerText;
+                } else {
+                    // Code block, need to convert
+                    mermaidCode = block.textContent || block.innerText;
+                    wrapper = document.createElement('div');
+                    wrapper.className = 'mermaid';
+                    wrapper.id = 'mermaid-' + index;
+                    
+                    // Replace the code block with mermaid div
+                    block.parentNode.parentNode.replaceChild(wrapper, block.parentNode);
+                }
                 
                 // Render the mermaid diagram
-                mermaid.render('mermaid-svg-' + index, mermaidCode).then(result => {
-                    wrapper.innerHTML = result.svg;
-                });
+                if (mermaidCode.trim()) {
+                    mermaid.render('mermaid-svg-' + index, mermaidCode).then(result => {
+                        wrapper.innerHTML = result.svg;
+                    }).catch(err => {
+                        console.error('Mermaid rendering failed:', err);
+                        wrapper.innerHTML = '<pre style="color: red;">Mermaid rendering failed: ' + err.message + '</pre>';
+                    });
+                }
             });
+            
+            // Also try to render any remaining .mermaid divs that weren't processed
+            setTimeout(() => {
+                const remainingMermaid = document.querySelectorAll('.mermaid:not([data-processed])');
+                remainingMermaid.forEach((element, index) => {
+                    element.setAttribute('data-processed', 'true');
+                    if (!element.innerHTML.includes('<svg')) {
+                        mermaid.run({
+                            nodes: [element]
+                        });
+                    }
+                });
+            }, 100);
         });
     </script>
 </head>
 <body>
     <div class="header">
-        <h1>⛽ FuelMember System</h1>
+        <h1>⛽ MemberCard System</h1>
         <p>{{ site.description }}</p>
         <a href="index.html" class="nav-link">🏠 Home</a>
         <a href="ui_mobile_app.html" class="nav-link">📱 Mobile UI</a>
         <a href="ui_web_app.html" class="nav-link">💻 Web UI</a>
-        <a href="mobile_flowchart.html" class="nav-link">📊 Flowchart</a>
+        <a href="flowchart.html" class="nav-link">📊 Main Flowchart</a>
+        <a href="mobile_flowchart.md" class="nav-link">📱 Mobile Flow</a>
+        <a href="web_flowchart.md" class="nav-link">💻 Web Flow</a>
+        <a href="flowchart_thai.md" class="nav-link">🇹🇭 Thai Flow</a>
     </div>
     
     <main>
